@@ -111,10 +111,10 @@ export default function Ocr() {
       <SafeAreaView style={styles.container}>
         <View style={styles.topSection}>
           <Button
-            title="Pick an image from gallery"
+            title="Seleccionar una imagen de la galería"
             onPress={pickImageGallery}
           />
-          <Button title="Pick an image from camera" onPress={pickImageCamera} />
+          <Button title="Tomar una foto con la cámara" onPress={pickImageCamera} />
         </View>
         <View style={styles.middleSection}>
           {image && (
@@ -132,9 +132,9 @@ export default function Ocr() {
           {loading ? (
             <ActivityIndicator color="orange" />
           ) : error ? (
-            <Text style={styles.errorText}>Failed to capture data</Text>
+            <Text style={styles.errorText}>Error al capturar los datos</Text>
           ) : extractedText.trim() !== "" ? (
-            <Text style={styles.successText}>Data successfully captured</Text>
+            <Text style={styles.successText}>Datos capturados con éxito</Text>
           ) : null}
         </View>
       </SafeAreaView>

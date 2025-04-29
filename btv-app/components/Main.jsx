@@ -5,7 +5,7 @@ import { Link } from "expo-router";
 export default function Main() {
   return (
     <View style={styles.container}>
-      <Link href="/service">Sevice</Link>
+      <Link href="/service">Servicio</Link>
     </View>
   );
 }

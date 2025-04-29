@@ -26,7 +26,7 @@ export default function Scan() {
     return (
       <View style={styles.centeredContainer}>
         <ActivityIndicator size="large" color="orange" />
-        <Text>Checking camera permissions...</Text>
+        <Text>Comprobando permisos de la cámara...</Text>
       </View>
     );
   }
@@ -34,8 +34,11 @@ export default function Scan() {
   if (!permission.granted) {
     return (
       <View style={styles.centeredContainer}>
-        <Text>Camera access is required to scan tickets.</Text>
-        <Button title="Allow Camera Access" onPress={requestPermission} />
+        <Text>Se requiere acceso a la cámara para escanear los billetes.</Text>
+        <Button
+          title="Permitir acceso a la cámara"
+          onPress={requestPermission}
+        />
       </View>
     );
   }
@@ -49,7 +52,7 @@ export default function Scan() {
 
     try {
       if (scannedCodes.current.has(data)) {
-        Alert.alert("Error", "This code has already been scanned.", [
+        Alert.alert("Error", "Este billete ya ha sido escaneado.", [
           {
             text: "Ok",
             onPress: () => {
@@ -66,7 +69,7 @@ export default function Scan() {
       if (buscadores.includes(codePart)) {
         // If the code exists in the list of "buscadores"
         scannedCodes.current.add(data);
-        Alert.alert("Success", "The code is valid!", [
+        Alert.alert("Success", "El billete es válido", [
           {
             text: "Ok",
             onPress: () => {
@@ -76,7 +79,7 @@ export default function Scan() {
         ]);
       } else {
         // If the code is not in the list of "buscadores"
-        Alert.alert("Error", "The code is not valid.", [
+        Alert.alert("Error", "El código no es válido.", [
           {
             text: "Ok",
             onPress: () => {
@@ -86,14 +89,18 @@ export default function Scan() {
         ]);
       }
     } catch (_error) {
-      Alert.alert("Error", "Failed to validate ticket. Please try again.", [
-        {
-          text: "Ok",
-          onPress: () => {
-            scanCooldown.current = false;
+      Alert.alert(
+        "Error",
+        "Falló la validación del billete. Inténtalo de nuevo.",
+        [
+          {
+            text: "Ok",
+            onPress: () => {
+              scanCooldown.current = false;
+            },
           },
-        },
-      ]);
+        ]
+      );
     }
   }
 
@@ -102,7 +109,7 @@ export default function Scan() {
       <Stack.Screen
         options={{
           headerLeft: () => {},
-          headerTitle: "Scan ticket",
+          headerTitle: "Escanear billete",
           headerRight: () => {},
         }}
       />

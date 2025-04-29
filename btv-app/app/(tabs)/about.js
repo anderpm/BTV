@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 export default function About() {
   return (
     <View style={styles.container}>
-      <Text>App developed by Ander</Text>
+      <Text>Aplicación desarrollada por Ander</Text>
     </View>
   );
 }

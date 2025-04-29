@@ -13,16 +13,16 @@ export default function Service() {
       <Stack.Screen
         options={{
           headerLeft: () => {},
-          headerTitle: "Service",
+          headerTitle: "Servicio",
           headerRight: () => {},
         }}
       />
       <View style={styles.container}>
         <View style={styles.topSection}>
           <Link href="/ocr" style={styles.link}>
-            Capture Data
+            Capturar Datos
           </Link>
-          {isDataCaptured && <Link href="/scan">Scan</Link>}
+          {isDataCaptured && <Link href="/scan">Escanear Billetes</Link>}
         </View>
         <View style={styles.bottomSection}>
           <ScrollView
@@ -34,7 +34,7 @@ export default function Service() {
                 <Text key={index}>{buscador}</Text>
               ))
             ) : (
-              <Text>No data captured yet.</Text>
+              <Text>Todavía no se han capturado datos.</Text>
             )}
           </ScrollView>
         </View>
