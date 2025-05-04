@@ -1,4 +1,4 @@
-import { useRef, useContext } from "react";
+import { useRef, useContext, useState } from "react";
 import {
   View,
   ActivityIndicator,
@@ -18,6 +18,7 @@ export default function Scan() {
   const { buscadores } = useContext(TextContext);
 
   const [permission, requestPermission] = useCameraPermissions();
+  const [overlayColor, setOverlayColor] = useState("transparent");
 
   const scanCooldown = useRef(false);
   const scannedCodes = useRef(new Set());
@@ -52,10 +53,12 @@ export default function Scan() {
 
     try {
       if (scannedCodes.current.has(data)) {
+        setOverlayColor("rgba(255, 0, 0, 0.6)");
         Alert.alert("Error", "Este billete ya ha sido escaneado.", [
           {
             text: "Ok",
             onPress: () => {
+              setOverlayColor("transparent");
               scanCooldown.current = false;
             },
           },
@@ -69,26 +72,31 @@ export default function Scan() {
       if (buscadores.includes(codePart)) {
         // If the code exists in the list of "buscadores"
         scannedCodes.current.add(data);
+        setOverlayColor("rgba(0, 255, 0, 0.6)");
         Alert.alert("Success", "El billete es válido", [
           {
             text: "Ok",
             onPress: () => {
+              setOverlayColor("transparent");
               scanCooldown.current = false;
             },
           },
         ]);
       } else {
         // If the code is not in the list of "buscadores"
+        setOverlayColor("rgba(255, 0, 0, 0.6)");
         Alert.alert("Error", "El código no es válido.", [
           {
             text: "Ok",
             onPress: () => {
+              setOverlayColor("transparent");
               scanCooldown.current = false;
             },
           },
         ]);
       }
     } catch (_error) {
+      setOverlayColor("rgba(255, 0, 0, 0.6)");
       Alert.alert(
         "Error",
         "Falló la validación del billete. Inténtalo de nuevo.",
@@ -96,6 +104,7 @@ export default function Scan() {
           {
             text: "Ok",
             onPress: () => {
+              setOverlayColor("transparent");
               scanCooldown.current = false;
             },
           },
@@ -113,14 +122,20 @@ export default function Scan() {
           headerRight: () => {},
         }}
       />
-      <CameraView
-        style={styles.cameraView}
-        facing="back"
-        onBarcodeScanned={onBarcodeScanned}
-        barcodeScannerSettings={{
-          barcodeTypes: ["qr"],
-        }}
-      />
+      <View style={styles.container}>
+        <CameraView
+          style={styles.cameraView}
+          facing="back"
+          onBarcodeScanned={onBarcodeScanned}
+          barcodeScannerSettings={{
+            barcodeTypes: ["qr"],
+          }}
+        />
+        <View
+          pointerEvents="none"
+          style={[styles.overlay, { backgroundColor: overlayColor }]}
+        />
+      </View>
     </>
   );
 }
@@ -131,7 +146,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  container: {
+    flex: 1,
+  },
   cameraView: {
     flex: 1,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
   },
 });
