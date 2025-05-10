@@ -44,16 +44,26 @@ export default function Scan() {
     );
   }
 
+  function vibrateSuccess() {
+    // Simple vibration
+    Vibration.vibrate();
+  }
+
+  function vibrateError() {
+    // Double vibration
+    Vibration.vibrate([0, 200, 100, 200]);
+  }
+
   async function onBarcodeScanned({ data }) {
     if (scanCooldown.current) return;
-
-    Vibration.vibrate();
 
     scanCooldown.current = true;
 
     try {
       if (scannedCodes.current.has(data)) {
         setOverlayColor("rgba(255, 0, 0, 0.6)");
+        vibrateError();
+
         Alert.alert("Error", "Este billete ya ha sido escaneado.", [
           {
             text: "Ok",
@@ -66,13 +76,14 @@ export default function Scan() {
         return;
       }
 
-      // Extract the part before the dash from the QR code
       const codePart = data.split("-")[0];
 
       if (buscadores.includes(codePart)) {
         // If the code exists in the list of "buscadores"
         scannedCodes.current.add(data);
         setOverlayColor("rgba(0, 255, 0, 0.6)");
+        vibrateSuccess();
+
         Alert.alert("Success", "El billete es válido", [
           {
             text: "Ok",
@@ -85,6 +96,8 @@ export default function Scan() {
       } else {
         // If the code is not in the list of "buscadores"
         setOverlayColor("rgba(255, 0, 0, 0.6)");
+        vibrateError();
+
         Alert.alert("Error", "El código no es válido.", [
           {
             text: "Ok",
@@ -97,6 +110,8 @@ export default function Scan() {
       }
     } catch (_error) {
       setOverlayColor("rgba(255, 0, 0, 0.6)");
+      vibrateError();
+
       Alert.alert(
         "Error",
         "Falló la validación del billete. Inténtalo de nuevo.",
