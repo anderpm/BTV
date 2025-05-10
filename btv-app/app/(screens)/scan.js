@@ -82,7 +82,7 @@ export default function Scan() {
         // If the code exists in the list of "buscadores"
         scannedCodes.current.add(data);
         setOverlayColor("rgba(0, 255, 0, 0.6)");
-        vibrateSuccess();
+        // vibrateSuccess();
 
         Alert.alert("Success", "El billete es válido", [
           {
